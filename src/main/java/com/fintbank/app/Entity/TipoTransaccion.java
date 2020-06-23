@@ -9,30 +9,34 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+/**
+ *
+ * @author Javier Ramirez
+ */
 @Entity
 @Table(name = "tipotransaccion", catalog = "postgres", schema = "public")
 public class TipoTransaccion implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long id;
+	private static final long serialVersionUID = 1L;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
+	private Long id;
 
-    @Column(name = "codigo")
-    private String codigo;
-    
-    @Column(name = "nombre")
-    private String nombre;
-    
-    @Column(name = "fisica")
-    private String fisica = "N";
-    
-    @Column(name = "efectocontable")
-    private Short  efectocontable = 1;
-    
-    @Column(name = "efectosaldo")
-    private Short efectosaldo = 1;
+	@Column(name = "codigo")
+	private String codigo;
+
+	@Column(name = "nombre")
+	private String nombre;
+
+	@Column(name = "fisica")
+	private String fisica = "N";
+
+	@Column(name = "efectocontable")
+	private Short efectocontable = 1;
+
+	@Column(name = "efectosaldo")
+	private Short efectosaldo = 1;
 
 	public Long getId() {
 		return id;

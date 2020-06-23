@@ -16,45 +16,45 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-public class JwtAuthTokenFilter extends OncePerRequestFilter{
+public class JwtAuthTokenFilter extends OncePerRequestFilter {
 
 	private static final Logger logger = LoggerFactory.getLogger(JwtAuthTokenFilter.class);
-	
+
 	@Autowired
-    private JwtProvider tokenProvider;
+	private JwtProvider tokenProvider;
 
-    @Autowired
-    private UsersDetailsService usersDetailsService;
+	@Autowired
+	private UsersDetailsService usersDetailsService;
 
-    @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-            throws ServletException, IOException {
-        try {
+	@Override
+	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+			throws ServletException, IOException {
+		try {
 
-            String jwt = getJwt( request );
-            if ( jwt != null && tokenProvider.validateJwtToken( jwt ) ) {
-                String username = tokenProvider.getUserNameFromJwtToken( jwt );
+			String jwt = getJwt(request);
+			if (jwt != null && tokenProvider.validateJwtToken(jwt)) {
+				String username = tokenProvider.getUserNameFromJwtToken(jwt);
 
-                UserDetails userDetails = usersDetailsService.loadUserByUsername( username );
-                UsernamePasswordAuthenticationToken authentication
-                        = new UsernamePasswordAuthenticationToken( userDetails, null, userDetails.getAuthorities() );
-                authentication.setDetails( new WebAuthenticationDetailsSource().buildDetails(request) );
+				UserDetails userDetails = usersDetailsService.loadUserByUsername(username);
+				UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+						userDetails, null, userDetails.getAuthorities());
+				authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-            }
-        } catch (Exception e) {
-            logger.error("Can NOT set user authentication -> Message: {}", e);
-        }
+				SecurityContextHolder.getContext().setAuthentication(authentication);
+			}
+		} catch (Exception e) {
+			logger.error("Can NOT set user authentication -> Message: {}", e);
+		}
 
-        filterChain.doFilter(request, response);
-    }
-    
-    private String getJwt(HttpServletRequest request) {
-        String authHeader = request.getHeader("Authorization");
+		filterChain.doFilter(request, response);
+	}
 
-        if (authHeader != null && authHeader.startsWith("Bearer ")) {
-            return authHeader.replace("Bearer ","");
-        }
-        return null;
-    }
+	private String getJwt(HttpServletRequest request) {
+		String authHeader = request.getHeader("Authorization");
+
+		if (authHeader != null && authHeader.startsWith("Bearer ")) {
+			return authHeader.replace("Bearer ", "");
+		}
+		return null;
+	}
 }

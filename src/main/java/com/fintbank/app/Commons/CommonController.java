@@ -23,47 +23,57 @@ public class CommonController<E, S extends CommonService<E>> {
 
 	@Autowired
 	private JwtProvider jwtProvider;
-	
+
 	@Autowired
 	protected S service;
-	
+
 	@Autowired
 	private UsuarioService usuarioService;
-	
+
 	@GetMapping
-	public ResponseEntity<?> listar(){
+	public ResponseEntity<?> listar() {
 		return ResponseEntity.ok().body(service.findAll());
 	}
-	
+
 	@GetMapping("/{id}")
-	public ResponseEntity<?> detalle(@PathVariable Long id){
+	public ResponseEntity<?> detalle(@PathVariable Long id) {
 		Optional<E> entity = service.findById(id);
-		if(!entity.isPresent()) {
+		if (!entity.isPresent()) {
 			return ResponseEntity.notFound().build();
 		}
 		return ResponseEntity.ok(entity.get());
 	}
-	
-	@PostMapping
-	public ResponseEntity<?> guardar(@RequestHeader("Authorization") String token, @Valid @RequestBody E entity){
-		
-		String alias = jwtProvider.getUserNameFromJwtToken(token.split(" ")[1]);
-		Usuario u = usuarioService.findByAlias(alias);
 
-		System.out.println(alias);
-		
-		if( u != null ){
-			System.out.println(u);
-			
-			E entityNew = service.save(entity);
-			return ResponseEntity.status(HttpStatus.CREATED).body(entityNew);
+	@PostMapping
+	public ResponseEntity<?> guardar(@Valid @RequestBody E entity, @RequestHeader("Authorization") String token) {
+
+		if (token != null) {
+			String alias = jwtProvider.getUserNameFromJwtToken(token.split(" ")[1]);
+			Usuario user = usuarioService.findByAlias(alias);
+			if (user.getRoleId().getNombre() == "ROLE_ADM") {
+				E entityNew = service.save(entity);
+				return ResponseEntity.status(HttpStatus.CREATED).body(entityNew);
+			}
+			return new ResponseEntity<>("Role Not Allowed", HttpStatus.FORBIDDEN);
+		} else {
+			return new ResponseEntity<>("Missing Token", HttpStatus.BAD_REQUEST);
 		}
-		return new ResponseEntity<String>("Token invalido", HttpStatus.BAD_REQUEST);
 	}
-	
+
 	@DeleteMapping("/{id}")
-	public ResponseEntity<?> eliminar(@PathVariable Long id){
-		service.deleteById(id);
-		return ResponseEntity.noContent().build();
+	public ResponseEntity<?> eliminar(@PathVariable Long id, @RequestHeader("Authorization") String token) {
+
+		if (token != null) {
+			String alias = jwtProvider.getUserNameFromJwtToken(token.split(" ")[1]);
+			Usuario user = usuarioService.findByAlias(alias);
+			if (user.getRoleId().getNombre() == "ROLE_ADM" || user.getRoleId().getNombre() == "ROLE_BNK") {
+				service.deleteById(id);
+				return ResponseEntity.noContent().build();
+			} else {
+				return new ResponseEntity<>("Role Not Allowed", HttpStatus.FORBIDDEN);
+			}
+		} else {
+			return new ResponseEntity<>("Missing Token", HttpStatus.BAD_REQUEST);
+		}
 	}
 }

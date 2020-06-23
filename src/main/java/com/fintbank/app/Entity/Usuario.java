@@ -19,7 +19,6 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /**
@@ -30,182 +29,184 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @Table(name = "usuario", catalog = "postgres", schema = "public")
 public class Usuario implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-    
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long id;
-    
-    @Column(name = "direccion")
-    private String direccion;
-    
-    @Column(name = "alias")
-    private String alias;
-    
-    @Column(name = "notificacion")
-    private String notificacion;
-    
-    @Column(name = "estado")
-    private Short estado = 1;
-    
-    @Column(name = "clave")
-    private String clave;
-    
-    @Column(name = "creado")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date creado;
-    
-    @Column(name = "activado")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date activado;
-    
-    @Column(name = "ultimoinicio")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date ultimoinicio;
-    
-    @Column(name = "verificacion")
-    private String verificacion;
+	private static final long serialVersionUID = 1L;
 
-    @Column(name = "tipoautenticacion")
-    private String tipoautenticacion;
-    
-    @Column(name = "autenticacionclave")
-    private String autenticacionclave;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
+	private Long id;
 
-    @JsonIgnoreProperties(value = {"usuario"}, allowSetters = true)
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Dispositivo> dispositivoList;
-    
-    @JsonIgnoreProperties(value = {"usuarios", "roles", "hibernateLazyInitializer", "handler"}, allowSetters = true)
+	@Column(name = "direccion")
+	private String direccion;
+
+	@Column(name = "alias")
+	private String alias;
+
+	@Column(name = "notificacion")
+	private String notificacion;
+
+	@Column(name = "estado")
+	private Short estado = 1;
+
+	@Column(name = "clave")
+	private String clave;
+
+	@Column(name = "creado")
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date creado;
+
+	@Column(name = "activado")
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date activado;
+
+	@Column(name = "ultimoinicio")
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date ultimoinicio;
+
+	@Column(name = "verificacion")
+	private String verificacion;
+
+	@Column(name = "tipoautenticacion")
+	private String tipoautenticacion;
+
+	@Column(name = "autenticacionclave")
+	private String autenticacionclave;
+
+	@JsonIgnoreProperties(value = { "usuario" }, allowSetters = true)
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<Dispositivo> dispositivoList;
+
+	@JsonIgnoreProperties(value = { "usuarios", "roles", "hibernateLazyInitializer", "handler" }, allowSetters = true)
 	@ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "role_id")
+	@JoinColumn(name = "role_id")
 	private Role roleId;
-    
-    @PrePersist
-    private void prePersist() {
-    	this.creado = new Date();
-    }
-    
-    public Usuario() {
-    	this.dispositivoList = new ArrayList<>();
-    }
 
-    public Long getId() {
-        return id;
-    }
+	@PrePersist
+	private void prePersist() {
+		this.creado = new Date();
+	}
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public Usuario() {
+		this.dispositivoList = new ArrayList<>();
+	}
 
-    public String getDireccion() {
-        return direccion;
-    }
+	public Long getId() {
+		return id;
+	}
 
-    public void setDireccion(String direccion) {
-        this.direccion = direccion;
-    }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    public String getAlias() {
-        return alias;
-    }
+	public String getDireccion() {
+		return direccion;
+	}
 
-    public void setAlias(String alias) {
-        this.alias = alias;
-    }
+	public void setDireccion(String direccion) {
+		this.direccion = direccion;
+	}
 
-    public String getNotificacion() {
-        return notificacion;
-    }
+	public String getAlias() {
+		return alias;
+	}
 
-    public void setNotificacion(String notificacion) {
-        this.notificacion = notificacion;
-    }
+	public void setAlias(String alias) {
+		this.alias = alias;
+	}
 
-    public Short getEstado() {
-        return estado;
-    }
+	public String getNotificacion() {
+		return notificacion;
+	}
 
-    public void setEstado(Short estado) {
-        this.estado = estado;
-    }
+	public void setNotificacion(String notificacion) {
+		this.notificacion = notificacion;
+	}
 
-    public String getClave() {
-        return clave;
-    }
+	public Short getEstado() {
+		return estado;
+	}
 
-    public void setClave(String clave) {
-        this.clave = clave;
-    }
+	public void setEstado(Short estado) {
+		this.estado = estado;
+	}
 
-    public Date getCreado() {
-        return creado;
-    }
+	public String getClave() {
+		return clave;
+	}
 
-    public void setCreado(Date creado) {
-        this.creado = creado;
-    }
+	public void setClave(String clave) {
+		this.clave = clave;
+	}
 
-    public Date getActivado() {
-        return activado;
-    }
+	public Date getCreado() {
+		return creado;
+	}
 
-    public void setActivado(Date activado) {
-        this.activado = activado;
-    }
+	public void setCreado(Date creado) {
+		this.creado = creado;
+	}
 
-    public Date getUltimoinicio() {
-        return ultimoinicio;
-    }
+	public Date getActivado() {
+		return activado;
+	}
 
-    public void setUltimoinicio(Date ultimoinicio) {
-        this.ultimoinicio = ultimoinicio;
-    }
+	public void setActivado(Date activado) {
+		this.activado = activado;
+	}
 
-    public String getVerificacion() {
-        return verificacion;
-    }
+	public Date getUltimoinicio() {
+		return ultimoinicio;
+	}
 
-    public void setVerificacion(String verificacion) {
-        this.verificacion = verificacion;
-    }
+	public void setUltimoinicio(Date ultimoinicio) {
+		this.ultimoinicio = ultimoinicio;
+	}
 
-    public String getTipoautenticacion() {
-        return tipoautenticacion;
-    }
+	public String getVerificacion() {
+		return verificacion;
+	}
 
-    public void setTipoautenticacion(String tipoautenticacion) {
-        this.tipoautenticacion = tipoautenticacion;
-    }
+	public void setVerificacion(String verificacion) {
+		this.verificacion = verificacion;
+	}
 
-    public String getAutenticacionclave() {
-        return autenticacionclave;
-    }
+	public String getTipoautenticacion() {
+		return tipoautenticacion;
+	}
 
-    public void setAutenticacionclave(String autenticacionclave) {
-        this.autenticacionclave = autenticacionclave;
-    }
+	public void setTipoautenticacion(String tipoautenticacion) {
+		this.tipoautenticacion = tipoautenticacion;
+	}
 
-    public List<Dispositivo> getDispositivoList() {
-        return dispositivoList;
-    }
+	public String getAutenticacionclave() {
+		return autenticacionclave;
+	}
 
-    public void setDispositivoList(List<Dispositivo> dispositivoList) {
-    	this.dispositivoList = dispositivoList;
-    	/*this.dispositivoList.clear();
-    	dispositivoList.forEach(this::addDispositivoList);*/
-    }
-    
-    public void addDispositivoList(Dispositivo dispositivo) {
-        this.dispositivoList.add(dispositivo);
-        //dispositivo.setUsuario(this);
-    }
-    
-    public void deleteDispositivoList(Dispositivo dispositivo) {
-        this.dispositivoList.remove(dispositivo);
-        //dispositivo.setUsuario(null);
-    }
+	public void setAutenticacionclave(String autenticacionclave) {
+		this.autenticacionclave = autenticacionclave;
+	}
+
+	public List<Dispositivo> getDispositivoList() {
+		return dispositivoList;
+	}
+
+	public void setDispositivoList(List<Dispositivo> dispositivoList) {
+		this.dispositivoList = dispositivoList;
+		/*
+		 * this.dispositivoList.clear();
+		 * dispositivoList.forEach(this::addDispositivoList);
+		 */
+	}
+
+	public void addDispositivoList(Dispositivo dispositivo) {
+		this.dispositivoList.add(dispositivo);
+		// dispositivo.setUsuario(this);
+	}
+
+	public void deleteDispositivoList(Dispositivo dispositivo) {
+		this.dispositivoList.remove(dispositivo);
+		// dispositivo.setUsuario(null);
+	}
 
 	public Role getRoleId() {
 		return roleId;
@@ -214,14 +215,4 @@ public class Usuario implements Serializable {
 	public void setRoleId(Role roleId) {
 		this.roleId = roleId;
 	}
-
-	@Override
-	public String toString() {
-		return "Usuario [id=" + id + ", direccion=" + direccion + ", alias=" + alias + ", notificacion=" + notificacion
-				+ ", estado=" + estado + ", clave=" + clave + ", creado=" + creado + ", activado=" + activado
-				+ ", ultimoinicio=" + ultimoinicio + ", verificacion=" + verificacion + ", tipoautenticacion="
-				+ tipoautenticacion + ", autenticacionclave=" + autenticacionclave + ", roleId=" + roleId + "]";
-	}	
-	
-	
 }

@@ -86,5 +86,5 @@ public class RelacionCuenta implements Serializable {
 
 	public void setFechatransaccion(Date fechatransaccion) {
 		this.fechatransaccion = fechatransaccion;
-	}	
+	}
 }

@@ -9,19 +9,23 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+/**
+ *
+ * @author Javier Ramirez
+ */
 @Entity
 @Table(name = "roles", catalog = "postgres", schema = "public")
 public class Role implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
 	private Long id;
 	private String nombre;
 	private String descripcion;
-	
+
 	public Role() {
 	}
 
@@ -48,17 +52,17 @@ public class Role implements Serializable {
 	public void setDescripcion(String descripcion) {
 		this.descripcion = descripcion;
 	}
-	
-	public String getRoles(){
-		switch (nombre){
-			case "ROLE_USR":
-				return "Cliente";
-			case "ROLE_BNK":
-					return "Banco";
-			case "ROLE_ADM":
-				return "Admin";
-			default:
-				return "No identificado";
+
+	public String getRoles() {
+		switch (nombre) {
+		case "ROLE_USR":
+			return "Cliente";
+		case "ROLE_BNK":
+			return "Banco";
+		case "ROLE_ADM":
+			return "Admin";
+		default:
+			return "No identificado";
 		}
 	}
 }

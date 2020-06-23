@@ -1,10 +1,14 @@
 package com.fintbank.app.Auth;
 
+import java.util.Date;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
+
+import com.fintbank.app.Config.Functions;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -24,6 +28,7 @@ public class JwtProvider {
         User usuario = (User) authentication.getPrincipal();
 
         return Jwts.builder()
+        		.setExpiration(Functions.sumarRestarDias(new Date(), 1))
                 .setSubject(usuario.getUsername())
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)
                 .compact();

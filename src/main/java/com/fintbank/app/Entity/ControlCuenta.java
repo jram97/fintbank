@@ -19,40 +19,43 @@ import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+/**
+ *
+ * @author Javier Ramirez
+ */
 @Entity
 @Table(name = "controlcuenta", catalog = "postgres", schema = "public")
 public class ControlCuenta implements Serializable {
 
+	private static final long serialVersionUID = 1L;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
+	private Long id;
 
-    private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long id;
- 
-    @Column(name = "fecha")
-    @Temporal(TemporalType.DATE)
-    private Date fecha;
-    
-    @Column(name = "entrada")
-    private BigDecimal entrada = new BigDecimal("0.00");
-    
-    @Column(name = "salida")
-    private BigDecimal salida = new BigDecimal("0.00");
-    
-    @JoinColumn(name = "cuenta_id")
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Cuenta cuenta;
-    
-    @JsonIgnoreProperties(value = {"controlcuentaList"})
-    @JoinColumn(name = "regla_id")
-    @ManyToOne(fetch = FetchType.LAZY)
-    private ReglaDefinicion regladefinicion;
+	@Column(name = "fecha")
+	@Temporal(TemporalType.DATE)
+	private Date fecha;
 
-    @PrePersist
-    public void prePersist() {
-    	this.fecha = new Date();
-    }
+	@Column(name = "entrada")
+	private BigDecimal entrada = new BigDecimal("0.00");
+
+	@Column(name = "salida")
+	private BigDecimal salida = new BigDecimal("0.00");
+
+	@JoinColumn(name = "cuenta_id")
+	@ManyToOne(fetch = FetchType.LAZY)
+	private Cuenta cuenta;
+
+	@JsonIgnoreProperties(value = { "controlcuentaList" })
+	@JoinColumn(name = "regla_id")
+	@ManyToOne(fetch = FetchType.LAZY)
+	private ReglaDefinicion regladefinicion;
+
+	@PrePersist
+	public void prePersist() {
+		this.fecha = new Date();
+	}
 
 	public Long getId() {
 		return id;

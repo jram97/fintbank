@@ -14,12 +14,11 @@ import com.fintbank.app.Commons.CommonController;
 import com.fintbank.app.Entity.TipoCanalFisico;
 import com.fintbank.app.Service.TipoCanalFisicoService;
 
-
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 @RequestMapping("ws/tipo-canal")
 public class TipoCanalFisicoController extends CommonController<TipoCanalFisico, TipoCanalFisicoService> {
-	
+
 	public ResponseEntity<?> editar(@RequestBody TipoCanalFisico tipoCanalFisico, @PathVariable Long id) {
 		Optional<TipoCanalFisico> tipoCanal = this.service.findById(id);
 		if (!tipoCanal.isPresent()) {
@@ -34,5 +33,4 @@ public class TipoCanalFisicoController extends CommonController<TipoCanalFisico,
 		return ResponseEntity.status(HttpStatus.CREATED).body(this.service.save(nuevoRegistro));
 	}
 
-	
 }

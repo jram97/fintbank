@@ -31,7 +31,6 @@ import com.fintbank.app.Service.TipoTransaccionService;
 import com.fintbank.app.Service.TransaccionCuentaService;
 import com.fintbank.app.Service.UsuarioService;
 
-
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 @RequestMapping("ws/cuenta")
@@ -39,10 +38,10 @@ public class CuentaController extends CommonController<Cuenta, CuentaService> {
 
 	@Autowired
 	private UsuarioService usuarioService;
-	
+
 	@Autowired
 	private RelacionCuentaService relacionCuentaService;
-	
+
 	@Autowired
 	private TransaccionCuentaService transaccionCuentaService;
 
@@ -52,50 +51,49 @@ public class CuentaController extends CommonController<Cuenta, CuentaService> {
 	@Autowired
 	private TipoTransaccionService tipoTransaccionService;
 
-	
-	/**ONLY DEVELOPER AFTER DELETE*/
+	/** ONLY DEVELOPER AFTER DELETE */
 	@PutMapping("/sumar/{id}")
-	public ResponseEntity<?> sumarSaldo(@Valid @RequestBody Cuenta cuenta, @PathVariable Long id){
+	public ResponseEntity<?> sumarSaldo(@Valid @RequestBody Cuenta cuenta, @PathVariable Long id) {
 		Optional<Cuenta> cuentaExists = this.service.findById(id);
 		cuentaExists.get().setSaldo(cuenta.getSaldo());
 		this.service.save(cuentaExists.get());
 		return ResponseEntity.ok(cuentaExists);
 	}
-	
+
 	@PostMapping("/definicion-cuenta/{id}")
-	public ResponseEntity<?> agregarDefinicionCuenta(@Valid @RequestBody Cuenta cuenta, @PathVariable Long id){
+	public ResponseEntity<?> agregarDefinicionCuenta(@Valid @RequestBody Cuenta cuenta, @PathVariable Long id) {
 		Optional<DefinicionCuenta> definicionExist = definicionCuentaService.findById(id);
-		
-		if(!definicionExist.isPresent()) {
+
+		if (!definicionExist.isPresent()) {
 			return ResponseEntity.notFound().build();
 		}
 		Cuenta cuentaNew = cuenta;
 		cuentaNew.setNumero(cuenta.getNumero());
-		cuentaNew.setCorrelativooperaciones( 1 );
+		cuentaNew.setCorrelativooperaciones(1);
 		cuentaNew.setDcuenta(definicionExist.get());
 
 		return ResponseEntity.status(HttpStatus.CREATED).body(this.service.save(cuentaNew));
 	}
-	
+
 	@PutMapping("/{id}")
-	public ResponseEntity<?> editar(@Valid @RequestBody Cuenta cuenta, @PathVariable Long id){
+	public ResponseEntity<?> editar(@Valid @RequestBody Cuenta cuenta, @PathVariable Long id) {
 		Optional<Cuenta> cuentaExists = this.service.findById(id);
-		
-		if(!cuentaExists.isPresent()) {
+
+		if (!cuentaExists.isPresent()) {
 			return ResponseEntity.notFound().build();
 		}
 		Cuenta cuentaNew = cuentaExists.get();
 		cuentaNew.setNumero(cuenta.getNumero());
-		cuentaNew.setCorrelativooperaciones( (cuentaNew.getCorrelativooperaciones() + 1) );
+		cuentaNew.setCorrelativooperaciones((cuentaNew.getCorrelativooperaciones() + 1));
 
 		return ResponseEntity.status(HttpStatus.CREATED).body(this.service.save(this.service.save(cuentaNew)));
 	}
-	
+
 	@PutMapping("/cambiar-estado/{id}")
-	public ResponseEntity<?> cambiarEstado(@Valid @RequestBody Cuenta cuenta, @PathVariable Long id){
+	public ResponseEntity<?> cambiarEstado(@Valid @RequestBody Cuenta cuenta, @PathVariable Long id) {
 		Optional<Cuenta> cuentaExists = this.service.findById(id);
-		
-		if(!cuentaExists.isPresent()) {
+
+		if (!cuentaExists.isPresent()) {
 			return ResponseEntity.notFound().build();
 		}
 		Cuenta cuentaNew = cuentaExists.get();
@@ -103,80 +101,74 @@ public class CuentaController extends CommonController<Cuenta, CuentaService> {
 
 		return ResponseEntity.status(HttpStatus.CREATED).body(this.service.save(cuentaNew));
 	}
-	
+
 	@PutMapping("/enviar/{cuentade}/{cuentapara}/{tipoenvio}/{tiporecibo}")
-	public ResponseEntity<?> sumarMonto(
-			@Valid @RequestBody Cuenta cuenta,
-			@PathVariable String cuentade,
-			@PathVariable String cuentapara,
-			@PathVariable Long tipoenvio,
-			@PathVariable Long tiporecibo){
+	public ResponseEntity<?> sumarMonto(@Valid @RequestBody Cuenta cuenta, @PathVariable String cuentade,
+			@PathVariable String cuentapara, @PathVariable Long tipoenvio, @PathVariable Long tiporecibo) {
 
 		Optional<Cuenta> cuentaExists = this.service.findByNumero(cuentade);
-		HashMap<String, String> errs = new HashMap<>(); 
+		HashMap<String, String> errs = new HashMap<>();
 		errs.put("errs", "No cuentas con suficientes fondos");
 		errs.put("code", "409");
-		
-		if(!cuentaExists.isPresent()) {	
+
+		if (!cuentaExists.isPresent()) {
 			return ResponseEntity.notFound().build();
 		}
 		Cuenta cuentaNew = cuentaExists.get();
-		
-		if((cuentaExists.get().getSaldo() - cuenta.getSaldo()) >= 0.0) {
+
+		if ((cuentaExists.get().getSaldo() - cuenta.getSaldo()) >= 0.0) {
 			cuentaNew.setSaldo(new BigDecimal(cuentaExists.get().getSaldo() - cuenta.getSaldo())
-					.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue() );
-			cuentaNew.setCorrelativooperaciones( (cuentaNew.getCorrelativooperaciones() + 1) );
+					.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
+			cuentaNew.setCorrelativooperaciones((cuentaNew.getCorrelativooperaciones() + 1));
 
 			Optional<Cuenta> cuentaExist = this.service.findByNumero(cuentapara);
-			
-			if(!cuentaExist.isPresent()) {
+
+			if (!cuentaExist.isPresent()) {
 				return ResponseEntity.notFound().build();
 			}
 			Cuenta cuentaNews = cuentaExist.get();
-			
-			if(cuentaExist.get().getDcuenta().getMaximosaldo() >= (cuentaExist.get().getSaldo() + cuenta.getSaldo())) {
+
+			if (cuentaExist.get().getDcuenta().getMaximosaldo() >= (cuentaExist.get().getSaldo() + cuenta.getSaldo())) {
 				cuentaNews.setSaldo(new BigDecimal(cuentaExist.get().getSaldo() + cuenta.getSaldo())
 						.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
-				cuentaNews.setCorrelativooperaciones( (cuentaNews.getCorrelativooperaciones() + 1) );
-				
+				cuentaNews.setCorrelativooperaciones((cuentaNews.getCorrelativooperaciones() + 1));
+
 				RelacionCuenta rCuentae = relacionCuentaService.findByCuenta(cuentaExists.get());
 				RelacionCuenta rCuentar = relacionCuentaService.findByCuenta(cuentaExist.get());
 
 				Optional<TipoTransaccion> te = tipoTransaccionService.findById(tipoenvio);
 				Optional<TipoTransaccion> tr = tipoTransaccionService.findById(tiporecibo);
-				
+
 				Optional<Usuario> para = usuarioService.findById(rCuentar.getUsuario().getId());
 				Optional<Usuario> de = usuarioService.findById(rCuentae.getUsuario().getId());
-				
+
 				Cuenta envia = this.service.save(cuentaNew);
 				Cuenta recibe = this.service.save(cuentaNews);
-				
+
 				TransaccionCuenta tc = new TransaccionCuenta();
 				tc.setUsuariode(de.get());
 				tc.setUsuariopara(para.get());
 				tc.setTipotransaccionenvio(te.get());
 				tc.setTipotransaccionrecibo(tr.get());
-				tc.setMonto(new BigDecimal(cuenta.getSaldo())
-						.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
+				tc.setMonto(new BigDecimal(cuenta.getSaldo()).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
 				tc.setReferencia("132654");
 				tc.setCuentaenvia(envia);
 				tc.setCuentarecibe(recibe);
-				
-				HashMap<String, Object> response = new HashMap<>(); 
+
+				HashMap<String, Object> response = new HashMap<>();
 				response.put("transaccion", transaccionCuentaService.save(tc));
-				
+
 				return ResponseEntity.status(HttpStatus.CREATED).body(response);
 
-			}else {
-				HashMap<String, String> err = new HashMap<>(); 
+			} else {
+				HashMap<String, String> err = new HashMap<>();
 				err.put("errs", "La cuenta a la cual desea abonar, sobrepasa el limite debido al tipo de cuenta");
 				err.put("code", "409");
 
 				return ResponseEntity.status(HttpStatus.CONFLICT).body(err);
-
 			}
-		}else {
-			return ResponseEntity.status(HttpStatus.CONFLICT).body(errs);			
+		} else {
+			return ResponseEntity.status(HttpStatus.CONFLICT).body(errs);
 		}
 	}
 }

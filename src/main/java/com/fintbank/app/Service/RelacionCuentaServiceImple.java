@@ -10,7 +10,8 @@ import com.fintbank.app.Entity.Usuario;
 import com.fintbank.app.Repository.RelacionCuentaRepository;
 
 @Service
-public class RelacionCuentaServiceImple extends CommonServiceImple<RelacionCuenta, RelacionCuentaRepository> implements RelacionCuentaService {
+public class RelacionCuentaServiceImple extends CommonServiceImple<RelacionCuenta, RelacionCuentaRepository>
+		implements RelacionCuentaService {
 
 	@Transactional(readOnly = true, timeout = 10)
 	@Override

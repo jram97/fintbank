@@ -21,7 +21,7 @@ public class CommonServiceImple<E, R extends JpaRepository<E, Long>> implements 
 		return repository.findAll();
 	}
 
-	@Transactional(readOnly = true, timeout = 15)	
+	@Transactional(readOnly = true, timeout = 15)
 	@Override
 	public Optional<E> findById(Long id) {
 		return repository.findById(id);
@@ -33,7 +33,7 @@ public class CommonServiceImple<E, R extends JpaRepository<E, Long>> implements 
 		return repository.save(entity);
 	}
 
-	@Transactional(timeout = 10)	
+	@Transactional(timeout = 10)
 	@Override
 	public void deleteById(Long id) {
 		repository.deleteById(id);

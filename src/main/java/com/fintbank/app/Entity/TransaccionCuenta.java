@@ -25,9 +25,9 @@ import javax.persistence.TemporalType;
 public class TransaccionCuenta implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
 	private Long id;
 
 	@Column(name = "referencia")
@@ -62,19 +62,22 @@ public class TransaccionCuenta implements Serializable {
 	@JoinColumn(name = "tipotransaccion_recibo_id")
 	@ManyToOne(fetch = FetchType.LAZY)
 	private TipoTransaccion tipotransaccionrecibo;
-	
-    @JoinColumn(name = "cuenta_envia_id")
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Cuenta cuentaenvia;
 
-    @JoinColumn(name = "cuenta_recibe_id")
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Cuenta cuentarecibe;
-
-	/*@JsonIgnoreProperties(value = { "transaccioncuentaList" })
-	@JoinColumn(name = "transaccion_id")
+	@JoinColumn(name = "cuenta_envia_id")
 	@ManyToOne(fetch = FetchType.LAZY)
-	private Transaccion transaccion;*/
+	private Cuenta cuentaenvia;
+
+	@JoinColumn(name = "cuenta_recibe_id")
+	@ManyToOne(fetch = FetchType.LAZY)
+	private Cuenta cuentarecibe;
+
+	/*
+	 * @JsonIgnoreProperties(value = { "transaccioncuentaList" })
+	 * 
+	 * @JoinColumn(name = "transaccion_id")
+	 * 
+	 * @ManyToOne(fetch = FetchType.LAZY) private Transaccion transaccion;
+	 */
 
 	@PrePersist
 	public void prePersist() {
@@ -173,14 +176,12 @@ public class TransaccionCuenta implements Serializable {
 		this.usuariopara = usuariopara;
 	}
 
-	
-	/*public Transaccion getTransaccion() {
-		return transaccion;
-	}
-
-	public void setTransaccion(Transaccion transaccion) {
-		this.transaccion = transaccion;
-	}*/
+	/*
+	 * public Transaccion getTransaccion() { return transaccion; }
+	 * 
+	 * public void setTransaccion(Transaccion transaccion) { this.transaccion =
+	 * transaccion; }
+	 */
 
 	public Cuenta getCuentaenvia() {
 		return cuentaenvia;

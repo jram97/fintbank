@@ -3,18 +3,18 @@ package com.fintbank.app.Entity.DTO;
 public class Register {
 
 	private String direccion;
-    
-    private String alias;
-    
-    private String notificacion;
-    
-    private String clave;
-    
-    private String verificacion;
 
-    private String tipoautenticacion;
-    
-    private String autenticacionclave;
+	private String alias;
+
+	private String notificacion;
+
+	private String clave;
+
+	private String verificacion;
+
+	private String tipoautenticacion;
+
+	private String autenticacionclave;
 
 	private Long roleId;
 
@@ -82,6 +82,4 @@ public class Register {
 		this.roleId = roleId;
 	}
 
-	
-	
 }

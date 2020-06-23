@@ -27,7 +27,6 @@ import com.fintbank.app.Entity.DTO.Register;
 import com.fintbank.app.Service.RoleService;
 import com.fintbank.app.Service.UsuarioService;
 
-
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 @RequestMapping("ws/auth")
@@ -41,39 +40,38 @@ public class AuthController {
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
-	
+
 	@Autowired
 	private UsuarioService usuarioService;
 
 	@Autowired
 	private RoleService roleService;
-	
+
 	@PostMapping("/login")
-	public ResponseEntity<?> logIn(@Valid @RequestBody Login login){
-		
+	public ResponseEntity<?> logIn(@Valid @RequestBody Login login) {
+
 		Usuario usuario = usuarioService.findByAlias(login.getAlias());
-		
-		if(usuario == null){
+
+		if (usuario == null) {
 			return new ResponseEntity<String>("Credenciales incorrectas", HttpStatus.FORBIDDEN);
 		}
-		if(!passwordEncoder.matches( login.getPassword(), usuario.getClave()) ){
+		if (!passwordEncoder.matches(login.getPassword(), usuario.getClave())) {
 			return new ResponseEntity<String>("Credenciales incorrectas", HttpStatus.FORBIDDEN);
 		}
-		Authentication authentication = authenticationManager.authenticate(
-				new UsernamePasswordAuthenticationToken( login.getAlias(), login.getPassword() )
-		);
+		Authentication authentication = authenticationManager
+				.authenticate(new UsernamePasswordAuthenticationToken(login.getAlias(), login.getPassword()));
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 
 		String jwt = jwtProvider.generateJwtToken(authentication);
 		return ResponseEntity.ok(new JwtResponse(jwt, usuario));
 	}
-	
+
 	@PostMapping("/signin")
-	public ResponseEntity<?> signIn(@Valid @RequestBody Register user){
-				
+	public ResponseEntity<?> signIn(@Valid @RequestBody Register user) {
+
 		Usuario usuario = usuarioService.findByAlias(user.getAlias());
-		
-		if(usuario != null){
+
+		if (usuario != null) {
 			return new ResponseEntity<String>("Este cuenta ya existe", HttpStatus.BAD_REQUEST);
 		}
 
@@ -86,16 +84,15 @@ public class AuthController {
 		userToInsert.setNotificacion(user.getNotificacion());
 		userToInsert.setAutenticacionclave(user.getAutenticacionclave());
 		userToInsert.setRoleId(roles.get());
-		
+
 		Usuario newUser = usuarioService.save(userToInsert);
 
-		Authentication authentication = authenticationManager.authenticate(
-				new UsernamePasswordAuthenticationToken( user.getAlias(), user.getClave() )
-		);
+		Authentication authentication = authenticationManager
+				.authenticate(new UsernamePasswordAuthenticationToken(user.getAlias(), user.getClave()));
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 
 		String jwt = jwtProvider.generateJwtToken(authentication);
 		return ResponseEntity.ok(new JwtResponse(jwt, newUser));
 	}
-	
+
 }

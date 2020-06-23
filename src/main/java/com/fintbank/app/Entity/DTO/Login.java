@@ -3,7 +3,7 @@ package com.fintbank.app.Entity.DTO;
 public class Login {
 
 	private String alias;
-	
+
 	private String password;
 
 	public String getAlias() {

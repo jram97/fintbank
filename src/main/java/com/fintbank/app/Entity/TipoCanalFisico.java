@@ -9,21 +9,25 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+/**
+ *
+ * @author Javier Ramirez
+ */
 @Entity
 @Table(name = "tipocanalfisico", catalog = "postgres", schema = "public")
 public class TipoCanalFisico implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long id;
+	private static final long serialVersionUID = 1L;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
+	private Long id;
 
-    @Column(name = "codigo")
-    private String codigo;
-    
-    @Column(name = "nombre")
-    private String nombre;
+	@Column(name = "codigo")
+	private String codigo;
+
+	@Column(name = "nombre")
+	private String nombre;
 
 	public Long getId() {
 		return id;

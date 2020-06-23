@@ -28,98 +28,97 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @Table(name = "transaccion", catalog = "postgres", schema = "public")
 public class Transaccion implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long id;
+	private static final long serialVersionUID = 1L;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
+	private Long id;
 
-    @Column(name = "fechahora")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date fechahora;
-    
-    @Column(name = "descripcion")
-    private String descripcion;
-    
-    @Column(name = "identificadorvisual")
-    private String identificadorvisual;
+	@Column(name = "fechahora")
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date fechahora;
 
-    @JsonIgnoreProperties(value = {"transaccion"}, allowSetters = true)
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<TransaccionCuenta> transaccioncuentaList;
+	@Column(name = "descripcion")
+	private String descripcion;
 
-    @PrePersist
-    public void prePersist() {
-    	this.fechahora = new Date();
-    }
-    
-    public Transaccion() {
-    	this.transaccioncuentaList = new ArrayList<>();
-    }
+	@Column(name = "identificadorvisual")
+	private String identificadorvisual;
 
-    public Transaccion(Long id) {
-        this.id = id;
-    }
+	@JsonIgnoreProperties(value = { "transaccion" }, allowSetters = true)
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<TransaccionCuenta> transaccioncuentaList;
 
-    public Long getId() {
-        return id;
-    }
+	@PrePersist
+	public void prePersist() {
+		this.fechahora = new Date();
+	}
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public Transaccion() {
+		this.transaccioncuentaList = new ArrayList<>();
+	}
 
-    public Date getFechahora() {
-        return fechahora;
-    }
+	public Transaccion(Long id) {
+		this.id = id;
+	}
 
-    public void setFechahora(Date fechahora) {
-        this.fechahora = fechahora;
-    }
+	public Long getId() {
+		return id;
+	}
 
-    public String getDescripcion() {
-        return descripcion;
-    }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
+	public Date getFechahora() {
+		return fechahora;
+	}
 
-    public String getIdentificadorvisual() {
-        return identificadorvisual;
-    }
+	public void setFechahora(Date fechahora) {
+		this.fechahora = fechahora;
+	}
 
-    public void setIdentificadorvisual(String identificadorvisual) {
-        this.identificadorvisual = identificadorvisual;
-    }
+	public String getDescripcion() {
+		return descripcion;
+	}
 
-    public List<TransaccionCuenta> getTransaccioncuentaList() {
-        return transaccioncuentaList;
-    }
+	public void setDescripcion(String descripcion) {
+		this.descripcion = descripcion;
+	}
 
-    public void setTransaccioncuentaList(List<TransaccionCuenta> transaccioncuentaList) {
-        this.transaccioncuentaList = transaccioncuentaList;
-    }
-    
-    public void addTransaccionCuenta (TransaccionCuenta transaccionCuenta) {
-    	this.transaccioncuentaList.add(transaccionCuenta);
-    }
-    
-    public void deleteTransaccionCuenta (TransaccionCuenta transaccionCuenta) {
-    	this.transaccioncuentaList.remove(transaccionCuenta);
-    }
-    
-    @Override
-    public boolean equals(Object obj) {
-    	if(this == obj) {
-    		return true;
-    	}
-    	if(!(obj instanceof Transaccion)) {
-    		return false;
-    	}
-    	Transaccion t = (Transaccion) obj;
-    	return this.id != null && this.id.equals(t.getId());
-    }
+	public String getIdentificadorvisual() {
+		return identificadorvisual;
+	}
 
+	public void setIdentificadorvisual(String identificadorvisual) {
+		this.identificadorvisual = identificadorvisual;
+	}
+
+	public List<TransaccionCuenta> getTransaccioncuentaList() {
+		return transaccioncuentaList;
+	}
+
+	public void setTransaccioncuentaList(List<TransaccionCuenta> transaccioncuentaList) {
+		this.transaccioncuentaList = transaccioncuentaList;
+	}
+
+	public void addTransaccionCuenta(TransaccionCuenta transaccionCuenta) {
+		this.transaccioncuentaList.add(transaccionCuenta);
+	}
+
+	public void deleteTransaccionCuenta(TransaccionCuenta transaccionCuenta) {
+		this.transaccioncuentaList.remove(transaccionCuenta);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (!(obj instanceof Transaccion)) {
+			return false;
+		}
+		Transaccion t = (Transaccion) obj;
+		return this.id != null && this.id.equals(t.getId());
+	}
 
 }

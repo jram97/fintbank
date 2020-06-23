@@ -14,30 +14,34 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+/**
+ *
+ * @author Javier Ramirez
+ */
 @Entity
 @Table(name = "cuenta", catalog = "postgres", schema = "public")
 public class Cuenta implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-    
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    
-    @Column(name = "numero")
-    private String numero;
+	private static final long serialVersionUID = 1L;
 
-    @Column(name = "estado")
-    private Short estado;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    @Column(name = "saldo")
-    private double saldo = 0.00;
-    
-    @Column(name = "correlativooperaciones")
-    private int correlativooperaciones = 0;
+	@Column(name = "numero")
+	private String numero;
 
-    @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"}, allowSetters = true)
-    @JoinColumn(name = "tipo_cuenta_id")
+	@Column(name = "estado")
+	private Short estado;
+
+	@Column(name = "saldo")
+	private double saldo = 0.00;
+
+	@Column(name = "correlativooperaciones")
+	private int correlativooperaciones = 0;
+
+	@JsonIgnoreProperties(value = { "hibernateLazyInitializer", "handler" }, allowSetters = true)
+	@JoinColumn(name = "tipo_cuenta_id")
 	@ManyToOne(fetch = FetchType.LAZY)
 	private DefinicionCuenta dcuenta;
 
@@ -87,5 +91,5 @@ public class Cuenta implements Serializable {
 
 	public void setDcuenta(DefinicionCuenta dcuenta) {
 		this.dcuenta = dcuenta;
-	}    
+	}
 }

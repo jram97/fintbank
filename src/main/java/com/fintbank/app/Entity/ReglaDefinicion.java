@@ -17,38 +17,42 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+/**
+ *
+ * @author Javier Ramirez
+ */
 @Entity
 @Table(name = "regladefinicion", catalog = "postgres", schema = "public")
 public class ReglaDefinicion implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Integer id;
+	private static final long serialVersionUID = 1L;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
+	private Integer id;
 
-    @Column(name = "origen")
-    private Short origen;
-    
-    @Column(name = "maximodiario")
-    private int maximodiario;
-    
-    @Column(name = "maximooperacion")
-    private int maximooperacion;
-    
-    @JsonIgnoreProperties(value = {"regladefinicionList"})
-    @JoinColumn(name = "definicion_id")
-    @ManyToOne(fetch = FetchType.LAZY)
-    private DefinicionCuenta definicioncuenta;
-    
-    @JoinColumn(name = "transaccion_id")
-    @ManyToOne(fetch = FetchType.LAZY)
-    private TipoTransaccion tipotransaccion;
+	@Column(name = "origen")
+	private Short origen;
 
-    @JsonIgnoreProperties(value = {"regladefinicion"}, allowSetters = true)
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ControlCuenta> controlcuentaList;
-    
+	@Column(name = "maximodiario")
+	private int maximodiario;
+
+	@Column(name = "maximooperacion")
+	private int maximooperacion;
+
+	@JsonIgnoreProperties(value = { "regladefinicionList" })
+	@JoinColumn(name = "definicion_id")
+	@ManyToOne(fetch = FetchType.LAZY)
+	private DefinicionCuenta definicioncuenta;
+
+	@JoinColumn(name = "transaccion_id")
+	@ManyToOne(fetch = FetchType.LAZY)
+	private TipoTransaccion tipotransaccion;
+
+	@JsonIgnoreProperties(value = { "regladefinicion" }, allowSetters = true)
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<ControlCuenta> controlcuentaList;
+
 	public Integer getId() {
 		return id;
 	}
