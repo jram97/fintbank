@@ -21,7 +21,7 @@ import javax.persistence.TemporalType;
  * @author Javier Ramirez
  */
 @Entity
-@Table(name = "transaccioncuenta", catalog = "postgres", schema = "public")
+@Table(name = "transacciones", catalog = "postgres", schema = "public")
 public class TransaccionCuenta implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -47,41 +47,24 @@ public class TransaccionCuenta implements Serializable {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date contabilizado;
 
-	@JoinColumn(name = "usuario_de_id")
-	@ManyToOne(fetch = FetchType.LAZY)
-	private Usuario usuariode;
-
-	@JoinColumn(name = "usuario_para_id")
-	@ManyToOne(fetch = FetchType.LAZY)
-	private Usuario usuariopara;
-
 	@JoinColumn(name = "tipotransaccion_envio_id")
 	@ManyToOne(fetch = FetchType.LAZY)
-	private TipoTransaccion tipotransaccionenvio;
+	private TipoTransaccion tipoEnvia;
 
 	@JoinColumn(name = "tipotransaccion_recibo_id")
 	@ManyToOne(fetch = FetchType.LAZY)
-	private TipoTransaccion tipotransaccionrecibo;
+	private TipoTransaccion tipoRecibe;
 
 	@JoinColumn(name = "cuenta_envia_id")
 	@ManyToOne(fetch = FetchType.LAZY)
-	private Cuenta cuentaenvia;
+	private Cuenta envia;
 
 	@JoinColumn(name = "cuenta_recibe_id")
 	@ManyToOne(fetch = FetchType.LAZY)
-	private Cuenta cuentarecibe;
-
-	/*
-	 * @JsonIgnoreProperties(value = { "transaccioncuentaList" })
-	 * 
-	 * @JoinColumn(name = "transaccion_id")
-	 * 
-	 * @ManyToOne(fetch = FetchType.LAZY) private Transaccion transaccion;
-	 */
+	private Cuenta recibe;
 
 	@PrePersist
 	public void prePersist() {
-		this.aplicado = new Date();
 		this.contabilizado = new Date();
 	}
 
@@ -91,7 +74,7 @@ public class TransaccionCuenta implements Serializable {
 	public TransaccionCuenta(Long id) {
 		this.id = id;
 	}
-
+	
 	public Long getId() {
 		return id;
 	}
@@ -140,63 +123,36 @@ public class TransaccionCuenta implements Serializable {
 		this.contabilizado = contabilizado;
 	}
 
-	public Usuario getUsuariode() {
-		return usuariode;
+	public TipoTransaccion getTipoEnvia() {
+		return tipoEnvia;
 	}
 
-	public void setUsuariode(Usuario usuario_de) {
-		this.usuariode = usuario_de;
+	public void setTipoEnvio(TipoTransaccion tipoEnvia) {
+		this.tipoEnvia = tipoEnvia;
 	}
 
-	public Usuario getUsuariopara() {
-		return usuariopara;
+	public TipoTransaccion getTipoRecibe() {
+		return tipoRecibe;
 	}
 
-	public void setUsuario_para(Usuario usuario_para) {
-		this.usuariopara = usuario_para;
+	public void setTipoRecibe(TipoTransaccion tipoRecibe) {
+		this.tipoRecibe = tipoRecibe;
 	}
 
-	public TipoTransaccion getTipotransaccionenvio() {
-		return tipotransaccionenvio;
+	public Cuenta getEnvia() {
+		return envia;
 	}
 
-	public void setTipotransaccionenvio(TipoTransaccion tipotransaccionenvio) {
-		this.tipotransaccionenvio = tipotransaccionenvio;
+	public void setEnvia(Cuenta envia) {
+		this.envia = envia;
 	}
 
-	public TipoTransaccion getTipotransaccionrecibo() {
-		return tipotransaccionrecibo;
+	public Cuenta getRecibe() {
+		return recibe;
 	}
 
-	public void setTipotransaccionrecibo(TipoTransaccion tipotransaccionrecibo) {
-		this.tipotransaccionrecibo = tipotransaccionrecibo;
-	}
-
-	public void setUsuariopara(Usuario usuariopara) {
-		this.usuariopara = usuariopara;
-	}
-
-	/*
-	 * public Transaccion getTransaccion() { return transaccion; }
-	 * 
-	 * public void setTransaccion(Transaccion transaccion) { this.transaccion =
-	 * transaccion; }
-	 */
-
-	public Cuenta getCuentaenvia() {
-		return cuentaenvia;
-	}
-
-	public void setCuentaenvia(Cuenta cuentaenvia) {
-		this.cuentaenvia = cuentaenvia;
-	}
-
-	public Cuenta getCuentarecibe() {
-		return cuentarecibe;
-	}
-
-	public void setCuentarecibe(Cuenta cuentarecibe) {
-		this.cuentarecibe = cuentarecibe;
+	public void setRecibe(Cuenta recibe) {
+		this.recibe = recibe;
 	}
 
 	@Override

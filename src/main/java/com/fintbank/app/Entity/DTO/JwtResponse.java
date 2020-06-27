@@ -1,5 +1,6 @@
 package com.fintbank.app.Entity.DTO;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fintbank.app.Entity.Usuario;
 
 public class JwtResponse {
@@ -7,7 +8,8 @@ public class JwtResponse {
 	private String token;
 	
 	private String type = "Bearer";
-	
+
+	@JsonIgnoreProperties(value = { "roleId", "hibernateLazyInitializer", "handler" }, allowSetters = true)
 	private Usuario usuario;
 
 	public JwtResponse(String jwt, Usuario user) {

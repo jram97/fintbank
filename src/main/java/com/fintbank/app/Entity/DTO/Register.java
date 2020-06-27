@@ -12,11 +12,17 @@ public class Register {
 
 	private String verificacion;
 
-	private String tipoautenticacion;
+	private String tipoAutenticacion;
 
-	private String autenticacionclave;
+	private String autenticacionClave;
+	
+	private String numeroIdentificacion;
 
-	private Long roleId;
+	private Long role;
+
+	private Long tipoDefinicion;
+	
+	private Long cuenta;
 
 	public String getDireccion() {
 		return direccion;
@@ -58,28 +64,51 @@ public class Register {
 		this.verificacion = verificacion;
 	}
 
-	public String getTipoautenticacion() {
-		return tipoautenticacion;
+	public String getTipoAutenticacion() {
+		return tipoAutenticacion;
 	}
 
-	public void setTipoautenticacion(String tipoautenticacion) {
-		this.tipoautenticacion = tipoautenticacion;
+	public void setTipoAutenticacion(String tipoAutenticacion) {
+		this.tipoAutenticacion = tipoAutenticacion;
 	}
 
-	public String getAutenticacionclave() {
-		return autenticacionclave;
+	public String getAutenticacionClave() {
+		return autenticacionClave;
 	}
 
-	public void setAutenticacionclave(String autenticacionclave) {
-		this.autenticacionclave = autenticacionclave;
+	public void setAutenticacionClave(String autenticacionClave) {
+		this.autenticacionClave = autenticacionClave;
 	}
 
-	public Long getRoleId() {
-		return roleId;
+	public String getNumeroIdentificacion() {
+		return numeroIdentificacion;
 	}
 
-	public void setRoleId(Long roleId) {
-		this.roleId = roleId;
+	public void setNumeroIdentificacion(String numeroIdentificacion) {
+		this.numeroIdentificacion = numeroIdentificacion;
 	}
 
+	public Long getRole() {
+		return role;
+	}
+
+	public void setRole(Long role) {
+		this.role = role;
+	}
+
+	public Long getTipoDefinicion() {
+		return tipoDefinicion;
+	}
+
+	public void setTipoDefinicion(Long tipoDefinicion) {
+		this.tipoDefinicion = tipoDefinicion;
+	}
+
+	public Long getCuenta() {
+		return cuenta;
+	}
+
+	public void setCuenta(Long cuenta) {
+		this.cuenta = cuenta;
+	}
 }

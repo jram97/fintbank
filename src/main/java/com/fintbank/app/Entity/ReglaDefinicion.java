@@ -29,15 +29,15 @@ public class ReglaDefinicion implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	private Integer id;
+	private Long id;
 
 	@Column(name = "origen")
-	private Short origen;
+	private int origen;
 
-	@Column(name = "maximodiario")
+	@Column(name = "maximo_diario")
 	private int maximodiario;
 
-	@Column(name = "maximooperacion")
+	@Column(name = "maximo_operacion")
 	private int maximooperacion;
 
 	@JsonIgnoreProperties(value = { "regladefinicionList" })
@@ -53,19 +53,19 @@ public class ReglaDefinicion implements Serializable {
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<ControlCuenta> controlcuentaList;
 
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
-	public Short getOrigen() {
+	public int getOrigen() {
 		return origen;
 	}
 
-	public void setOrigen(Short origen) {
+	public void setOrigen(int origen) {
 		this.origen = origen;
 	}
 

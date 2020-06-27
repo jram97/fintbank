@@ -32,18 +32,23 @@ public class Cuenta implements Serializable {
 	private String numero;
 
 	@Column(name = "estado")
-	private Short estado;
+	private Short estado = 1;
 
 	@Column(name = "saldo")
 	private double saldo = 0.00;
 
-	@Column(name = "correlativooperaciones")
+	@Column(name = "correlativo")
 	private int correlativooperaciones = 0;
 
 	@JsonIgnoreProperties(value = { "hibernateLazyInitializer", "handler" }, allowSetters = true)
 	@JoinColumn(name = "tipo_cuenta_id")
 	@ManyToOne(fetch = FetchType.LAZY)
-	private DefinicionCuenta dcuenta;
+	private DefinicionCuenta definicion;
+	
+	@JsonIgnoreProperties(value = { "hibernateLazyInitializer", "handler" }, allowSetters = true)
+	@JoinColumn(name = "regla_definicion_id")
+	@ManyToOne(fetch = FetchType.LAZY)
+	private ReglaDefinicion reglaDefinicion;
 
 	public Long getId() {
 		return id;
@@ -85,11 +90,19 @@ public class Cuenta implements Serializable {
 		this.correlativooperaciones = correlativooperaciones;
 	}
 
-	public DefinicionCuenta getDcuenta() {
-		return dcuenta;
+	public DefinicionCuenta getDefinicion() {
+		return definicion;
 	}
 
-	public void setDcuenta(DefinicionCuenta dcuenta) {
-		this.dcuenta = dcuenta;
+	public void setDefinicion(DefinicionCuenta definicion) {
+		this.definicion = definicion;
+	}
+
+	public ReglaDefinicion getReglaDefinicion() {
+		return reglaDefinicion;
+	}
+
+	public void setReglaDefinicion(ReglaDefinicion reglaDefinicion) {
+		this.reglaDefinicion = reglaDefinicion;
 	}
 }

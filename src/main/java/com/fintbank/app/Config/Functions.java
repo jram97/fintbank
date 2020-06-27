@@ -11,5 +11,13 @@ public class Functions {
 		calendar.add(Calendar.DAY_OF_YEAR, dias);
 		return calendar.getTime();
 	}
-
+	
+	public static String numeroCuenta(String nombre, String nIndentidad) {
+		String posible = nombre + nIndentidad + nIndentidad + nIndentidad;
+		String cuenta = "";
+		for (int i = 0; i < 8; i++) {
+			cuenta += posible.charAt((int) Math.floor(Math.random() * posible.length()));
+		}
+		return cuenta;
+	}
 }

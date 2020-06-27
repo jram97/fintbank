@@ -25,7 +25,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
  * @author Javier Ramirez
  */
 @Entity
-@Table(name = "transaccion", catalog = "postgres", schema = "public")
+@Table(name = "transaccionc", catalog = "postgres", schema = "public")
 public class Transaccion implements Serializable {
 
 	private static final long serialVersionUID = 1L;

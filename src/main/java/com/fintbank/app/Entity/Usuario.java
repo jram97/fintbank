@@ -50,6 +50,9 @@ public class Usuario implements Serializable {
 
 	@Column(name = "clave")
 	private String clave;
+	
+	@Column(name = "numero_identificacion")
+	private String numeroIdentificacion;
 
 	@Column(name = "creado")
 	@Temporal(TemporalType.TIMESTAMP)
@@ -59,31 +62,36 @@ public class Usuario implements Serializable {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date activado;
 
-	@Column(name = "ultimoinicio")
+	@Column(name = "ultimo_inicio")
 	@Temporal(TemporalType.TIMESTAMP)
-	private Date ultimoinicio;
+	private Date ultimoInicio;
 
 	@Column(name = "verificacion")
 	private String verificacion;
 
-	@Column(name = "tipoautenticacion")
-	private String tipoautenticacion;
+	@Column(name = "tipo_autenticacion")
+	private String tipoAutenticacion;
 
-	@Column(name = "autenticacionclave")
-	private String autenticacionclave;
+	@Column(name = "autenticacion_clave")
+	private String autenticacionClave;
 
 	@JsonIgnoreProperties(value = { "usuario" }, allowSetters = true)
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Dispositivo> dispositivoList;
 
-	@JsonIgnoreProperties(value = { "usuarios", "roles", "hibernateLazyInitializer", "handler" }, allowSetters = true)
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "role_id")
-	private Role roleId;
+	private Role role;
 
+	@JsonIgnoreProperties(value = { "cuenta", "hibernateLazyInitializer", "handler" }, allowSetters = true)
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "cuenta_id")
+	private Cuenta cuenta;
+	
 	@PrePersist
 	private void prePersist() {
 		this.creado = new Date();
+		this.ultimoInicio = new Date();
 	}
 
 	public Usuario() {
@@ -104,6 +112,18 @@ public class Usuario implements Serializable {
 
 	public void setDireccion(String direccion) {
 		this.direccion = direccion;
+	}
+	
+	public String getNumeroIdentificacion() {
+		return numeroIdentificacion;
+	}
+
+	public void setNumeroIdentificacion(String numeroIdentificacion) {
+		this.numeroIdentificacion = numeroIdentificacion;
+	}
+
+	public Role getRole() {
+		return role;
 	}
 
 	public String getAlias() {
@@ -154,12 +174,12 @@ public class Usuario implements Serializable {
 		this.activado = activado;
 	}
 
-	public Date getUltimoinicio() {
-		return ultimoinicio;
+	public Date getUltimoInicio() {
+		return ultimoInicio;
 	}
 
-	public void setUltimoinicio(Date ultimoinicio) {
-		this.ultimoinicio = ultimoinicio;
+	public void setUltimoInicio(Date ultimoInicio) {
+		this.ultimoInicio = ultimoInicio;
 	}
 
 	public String getVerificacion() {
@@ -170,20 +190,20 @@ public class Usuario implements Serializable {
 		this.verificacion = verificacion;
 	}
 
-	public String getTipoautenticacion() {
-		return tipoautenticacion;
+	public String getTipoAutenticacion() {
+		return tipoAutenticacion;
 	}
 
-	public void setTipoautenticacion(String tipoautenticacion) {
-		this.tipoautenticacion = tipoautenticacion;
+	public void setTipoAutenticacion(String tipoAutenticacion) {
+		this.tipoAutenticacion = tipoAutenticacion;
 	}
 
-	public String getAutenticacionclave() {
-		return autenticacionclave;
+	public String getAutenticacionClave() {
+		return autenticacionClave;
 	}
 
-	public void setAutenticacionclave(String autenticacionclave) {
-		this.autenticacionclave = autenticacionclave;
+	public void setAutenticacionClave(String autenticacionClave) {
+		this.autenticacionClave = autenticacionClave;
 	}
 
 	public List<Dispositivo> getDispositivoList() {
@@ -209,10 +229,18 @@ public class Usuario implements Serializable {
 	}
 
 	public Role getRoleId() {
-		return roleId;
+		return role;
 	}
 
-	public void setRoleId(Role roleId) {
-		this.roleId = roleId;
+	public void setRole(Role role) {
+		this.role = role;
+	}
+
+	public Cuenta getCuenta() {
+		return cuenta;
+	}
+
+	public void setCuenta(Cuenta cuenta) {
+		this.cuenta = cuenta;
 	}
 }
