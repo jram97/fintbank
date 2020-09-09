@@ -11,7 +11,7 @@ import com.fintbank.app.Service.RoleService;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
-@RequestMapping("ws/role")
+@RequestMapping("api/v1/role")
 public class RoleController extends CommonController<Role, RoleService> {
 
 }

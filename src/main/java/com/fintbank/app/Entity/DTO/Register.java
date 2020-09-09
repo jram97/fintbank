@@ -111,4 +111,5 @@ public class Register {
 	public void setCuenta(Long cuenta) {
 		this.cuenta = cuenta;
 	}
+
 }

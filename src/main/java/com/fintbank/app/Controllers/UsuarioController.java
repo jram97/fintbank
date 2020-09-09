@@ -10,7 +10,7 @@ import com.fintbank.app.Service.UsuarioService;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
-@RequestMapping("ws/usuario")
+@RequestMapping("api/v1/usuarios")
 public class UsuarioController extends CommonController<Usuario, UsuarioService> {
 
 }

@@ -6,7 +6,6 @@ import java.util.Optional;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -20,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fintbank.app.Auth.JwtProvider;
+import com.fintbank.app.Commons.Response;
 import com.fintbank.app.Config.Functions;
 import com.fintbank.app.Entity.Cuenta;
 import com.fintbank.app.Entity.DefinicionCuenta;
@@ -35,7 +35,7 @@ import com.fintbank.app.Service.UsuarioService;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
-@RequestMapping("ws/auth")
+@RequestMapping("api/auth")
 public class AuthController {
 
 	@Autowired
@@ -52,70 +52,79 @@ public class AuthController {
 
 	@Autowired
 	private RoleService roleService;
-	
+
 	@Autowired
 	private DefinicionCuentaService definicionCuentaService;
-	
+
 	@Autowired
 	private CuentaService cuentaService;
 
 	@PostMapping("/login")
 	public ResponseEntity<?> logIn(@Valid @RequestBody Login login) {
 
-		Usuario usuario = usuarioService.findByAlias(login.getAlias());
+		try {
+			Usuario usuario = usuarioService.findByAlias(login.getAlias());
 
-		if (usuario == null) {
-			return new ResponseEntity<String>("Credenciales incorrectas", HttpStatus.FORBIDDEN);
+			if (usuario == null) {
+				return ResponseEntity.ok(new Response(500, "Credenciales incorrectas"));
+			}
+			if (!passwordEncoder.matches(login.getPassword(), usuario.getClave())) {
+				return ResponseEntity.ok(new Response(500, "Credenciales incorrectas"));
+			}
+			Authentication authentication = authenticationManager
+					.authenticate(new UsernamePasswordAuthenticationToken(login.getAlias(), login.getPassword()));
+			SecurityContextHolder.getContext().setAuthentication(authentication);
+
+			Usuario user = usuario;
+			user.setUltimoInicio(new Date());
+
+			String jwt = jwtProvider.generateJwtToken(authentication);
+			return ResponseEntity.ok(new JwtResponse(jwt, usuarioService.save(user)));
+		} catch (Exception e) {
+			return ResponseEntity.ok(new Response(500, "Faltan parametros", e.getMessage()));
 		}
-		if (!passwordEncoder.matches(login.getPassword(), usuario.getClave())) {
-			return new ResponseEntity<String>("Credenciales incorrectas", HttpStatus.FORBIDDEN);
-		}
-		Authentication authentication = authenticationManager
-				.authenticate(new UsernamePasswordAuthenticationToken(login.getAlias(), login.getPassword()));
-		SecurityContextHolder.getContext().setAuthentication(authentication);
-
-		Usuario user = usuario;
-		user.setUltimoInicio(new Date());
-
-		String jwt = jwtProvider.generateJwtToken(authentication);
-		return ResponseEntity.ok(new JwtResponse(jwt, usuarioService.save(user)));
 	}
 
 	@PostMapping("/signin")
 	public ResponseEntity<?> signIn(@Valid @RequestBody Register user) {
 
-		Usuario usuario = usuarioService.findByAlias(user.getAlias());
+		try {
+			Usuario usuario = usuarioService.findByAlias(user.getAlias());
 
-		if (usuario != null) {
-			return new ResponseEntity<String>("Este cuenta ya existe", HttpStatus.BAD_REQUEST);
+			if (usuario != null) {
+				return ResponseEntity.ok(new Response(500, "Este cuenta ya existe"));
+			}
+
+			Usuario userToInsert = new Usuario();
+			userToInsert.setAlias(user.getAlias());
+			userToInsert.setClave(passwordEncoder.encode(user.getClave()));
+			userToInsert.setDireccion(user.getDireccion());
+			userToInsert.setNotificacion(user.getNotificacion());
+			userToInsert.setAutenticacionClave(user.getAutenticacionClave());
+			userToInsert.setNumeroIdentificacion(user.getNumeroIdentificacion());
+
+			Optional<Role> roles = roleService.findById(user.getRole());
+
+			userToInsert.setRole(roles.get());
+
+			Cuenta newCuenta = new Cuenta();
+			Optional<DefinicionCuenta> definicionCuenta = definicionCuentaService.findById(user.getTipoDefinicion());
+			newCuenta.setNumero(Functions.numeroCuenta(user.getAlias(), user.getNumeroIdentificacion()));
+			newCuenta.setDefinicion(definicionCuenta.get());
+
+			userToInsert.setCuenta(cuentaService.save(newCuenta));
+
+			Usuario newUser = usuarioService.save(userToInsert);
+
+			Authentication authentication = authenticationManager
+					.authenticate(new UsernamePasswordAuthenticationToken(user.getAlias(), user.getClave()));
+			SecurityContextHolder.getContext().setAuthentication(authentication);
+
+			String jwt = jwtProvider.generateJwtToken(authentication);
+			return ResponseEntity.ok(new JwtResponse(jwt, newUser));
+
+		} catch (Exception e) {
+			return ResponseEntity.ok(new Response(500, "Faltan parametros", e.getMessage()));
 		}
-
-		Optional<Role> roles = roleService.findById(user.getRole());
-
-		Usuario userToInsert = new Usuario();
-		userToInsert.setAlias(user.getAlias());
-		userToInsert.setClave(passwordEncoder.encode(user.getClave()));
-		userToInsert.setDireccion(user.getDireccion());
-		userToInsert.setNotificacion(user.getNotificacion());
-		userToInsert.setAutenticacionClave(user.getAutenticacionClave());
-		userToInsert.setNumeroIdentificacion(user.getNumeroIdentificacion());
-		userToInsert.setRole(roles.get());
-		
-		Cuenta newCuenta = new Cuenta();
-		Optional<DefinicionCuenta> definicionCuenta = definicionCuentaService.findById(user.getTipoDefinicion());
-		newCuenta.setNumero(Functions.numeroCuenta(user.getAlias(), user.getNumeroIdentificacion()));
-		newCuenta.setDefinicion(definicionCuenta.get());
-		
-		userToInsert.setCuenta(cuentaService.save(newCuenta));
-	
-		Usuario newUser = usuarioService.save(userToInsert);
-
-		Authentication authentication = authenticationManager
-				.authenticate(new UsernamePasswordAuthenticationToken(user.getAlias(), user.getClave()));
-		SecurityContextHolder.getContext().setAuthentication(authentication);
-
-		String jwt = jwtProvider.generateJwtToken(authentication);
-		return ResponseEntity.ok(new JwtResponse(jwt, newUser));
 	}
-
 }

@@ -16,7 +16,7 @@ import com.fintbank.app.Service.TipoCanalFisicoService;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
-@RequestMapping("ws/tipo-canal")
+@RequestMapping("api/v1/tipo-canal")
 public class TipoCanalFisicoController extends CommonController<TipoCanalFisico, TipoCanalFisicoService> {
 
 	public ResponseEntity<?> editar(@RequestBody TipoCanalFisico tipoCanalFisico, @PathVariable Long id) {

@@ -11,7 +11,7 @@ import com.fintbank.app.Service.TipoTransaccionService;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
-@RequestMapping("ws/tipo-transaccion")
+@RequestMapping("api/v1/tipo-transaccion")
 public class TipoTransaccionController extends CommonController<TipoTransaccion, TipoTransaccionService> {
 
 }

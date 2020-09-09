@@ -16,6 +16,6 @@ public class Swagger_2 {
 	public Docket enableSwagger() {
 		return new Docket(DocumentationType.SWAGGER_2).select().apis(RequestHandlerSelectors.any())
 				.paths(PathSelectors.any()).build().apiInfo(new ApiInfoBuilder().version("1.0")
-						.title("RESTAPI - FINTBANK").description("Rutas :: Banckend para fonomed").build());
+						.title("RESTAPI - FINTBANK").description("Rutas :: Banckend para Fintbank").build());
 	}
 }
